@@ -85,13 +85,15 @@ Depending on your programming language, you might want to import the correspondi
 Ingredients and events are just data structures that describe your process data, carrying not just the names, but
 also the type information, for example `Ingredient[String]("order-id")` creates an ingredient of name "order-id"
 of type "String", for more information about Baker types please refer to [this section](../../reference/baker-types-and-values/).
-As shown in the code, events might carry ingredients, and have a maximum about of times they are allowed to fire, the 
-runtime will enforce this limit. For more information about this and other features of events please refer to [this section](../../reference/dsls/#events).
+As shown in the code, events might contain ingredients, and have a maximum amount of times they are allowed to fire, the 
+runtime will enforce this limit. For more information about this and other features of `Events` please refer to [this section](../../reference/dsls/#events).
+
+_Note: It is also possible to create events that carry no ingredients._
 
 ## Interactions
 
-Then, the desired actions can be modeled as `interactions`, in our case we are told that it exists a warehouse service 
-which we need to call to reserve the items, but this might either succeed or fail.
+Then, the desired actions can be modeled as `Interactions`, in our case we are told that a warehouse service 
+exists which we need to call to reserve the items, but this might either succeed or fail.
 
 _Note: Notice that when using the reflection API, the Java interface or Scala trait that will represent your interaction
 must have a method named `apply`, this is the method that the reflection API will convert into Baker types/ingredients/events._
@@ -194,23 +196,23 @@ must have a method named `apply`, this is the method that the reflection API wil
 
     ```
 
-An interaction resembles a function, it takes input ingredients and outputs 1 of several possible events. At runtime, when
-an event fires, baker tries to match the provided ingredients of 1 or several events to the input of awaiting interactions,
-as soon as there is a match on data, baker will execute the interactions, creating a cascading effect that will execute
+An interaction resembles a function, it takes ingredients as input and fires (output) a minimum of 1 event as output. At runtime, when
+an event fires, baker tries to match the provided ingredients of the fired events to the inpust of awaiting interactions,
+as soon as there is a match on data, baker will execute the matched interactions, creating a cascading effect that will execute
 your business process in an asynchronous manner.
 
 This was a simple example, but you might have already concluded that this can be further composed into bigger processes by
-making new interactions that require events and ingredients which are output of previous interactions. 
+making new interactions that require events and ingredients as input which are output of a previous interaction. 
 
-You can create also interactions which take no input ingredients but are executed after events (with or without provided 
+You can also create interactions with no ingredients as input which are executed after events (with or without provided 
 ingredients) are fired, for this and other features please refer to the conceptual documentation found [here](../../reference/dsls/#events).
 
 ## The Recipe
 
-The final step is to create an object that will hold all of these descriptions into what we call a Recipe, this becomes
-the "blueprint" of your process, it can define failure handling strategies, and will "auto-bind" the interactions, that 
-means it detects the composition between interactions by matching the ingredients provided by events to the input ingredients
-required by interactions.
+The final step is to create an object that will hold all of these descriptions, called a Recipe, this becomes
+the "blueprint" of your process, it can define failure handling strategies, and will "auto-bind" the interactions. That 
+means it detects the composition between interactions by matching the ingredients provided by an event to the input ingredients
+required by an interaction.
 
 === "Scala"
 
@@ -243,12 +245,12 @@ required by interactions.
 
 Let us remember that this is just a _description_ of what our program across multiple services should do, on the next 
 sections we will see how to visualize it, create runtime `instances` of our recipes and their parts, what common practices
-are there for testing, everything you need to know to deploy and monitor a baker cluster, and how Baker helps you handle
+are there for testing, everything you need to know to deploy and monitor a Baker cluster, and how Baker helps you handle
 and resolve failure which is not modeled in the domain (in the recipe).
 
 As you might have realised `Ingredients`, `Events` and `Interactions` could be reused on different Recipes, giving common
 business verbs that your programs and organisation can use across teams, the same way different cooking recipes share
-same processes (simmering, boiling, cutting) you should reuse interactions across your different business recipes.
+processes (simmering, boiling, cutting) you should reuse interactions across your different business recipes.
 
 As a bonus; you might have though that this API is verbose, we agree and that is why we developed an alternative 
 API which uses Java and Scala reflection.
