@@ -249,8 +249,7 @@ are there for testing, everything you need to know to deploy and monitor a Baker
 and resolve failure which is not modeled in the domain (in the recipe).
 
 As you might have realised `Ingredients`, `Events` and `Interactions` could be reused on different Recipes, giving common
-business verbs that your programs and organisation can use across teams, the same way different cooking recipes share
-processes (simmering, boiling, cutting) you should reuse interactions across your different business recipes.
+business verbs that your programs and organisation can use across teams, the same way different cooking recipes share processes (simmering, boiling, cutting) you should reuse interactions across your different business recipes.
 
 As a bonus; you might have though that this API is verbose, we agree and that is why we developed an alternative 
 API which uses Java and Scala reflection.
